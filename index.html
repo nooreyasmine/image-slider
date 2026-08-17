@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Image Slider</title>
+    <title>Simple Image Slider with Zoom</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="slider-container">
-        <div class="slides">
-            <img src="https://picsum.photos/id/1018/800/400" alt="Slide 1" class="slide active">
-            <img src="https://picsum.photos/id/1015/800/400" alt="Slide 2" class="slide">
-            <img src="https://picsum.photos/id/1019/800/400" alt="Slide 3" class="slide">
+    <!-- Main Container wrapping both slider and controls -->
+    <div class="wrapper">
+        <div class="slider-container">
+            <div class="slides">
+                <img src="https://picsum.photos/id/1018/800/400" alt="Slide 1" class="slide active">
+                <img src="https://picsum.photos/id/1015/800/400" alt="Slide 2" class="slide">
+                <img src="https://picsum.photos/id/1019/800/400" alt="Slide 3" class="slide">
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <button id="prevBtn" class="btn">❮</button>
+            <button id="nextBtn" class="btn">❯</button>
         </div>
-        
-        <!-- Navigation Buttons -->
-        <button id="prevBtn" class="btn">❮</button>
-        <button id="nextBtn" class="btn">❯</button>
+
+        <!-- Zoom Control Buttons -->
+        <div class="zoom-controls">
+            <button id="zoomInBtn" class="btn-zoom">Zoom In (+)</button>
+            <button id="zoomOutBtn" class="btn-zoom">Zoom Out (-)</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
