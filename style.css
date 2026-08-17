@@ -8,11 +8,19 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.slider-container {
-    position: relative;
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     width: 80%;
     max-width: 800px;
-    overflow: hidden;
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Prevents zoomed image from spilling outside the box */
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -26,6 +34,7 @@ body {
     width: 100%;
     display: none;
     object-fit: cover;
+    transition: transform 0.2s ease; /* Smooth zoom transition */
 }
 
 /* Show only the active slide */
@@ -45,6 +54,7 @@ body {
     font-size: 18px;
     border-radius: 4px;
     transition: background-color 0.3s;
+    z-index: 10; /* Ensures buttons stay on top of zoomed images */
 }
 
 #prevBtn { left: 15px; }
@@ -52,4 +62,25 @@ body {
 
 .btn:hover {
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Zoom controls styling */
+.zoom-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-zoom {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.btn-zoom:hover {
+    background-color: #555;
 }
