@@ -6,6 +6,7 @@ const zoomOutBtn = document.getElementById('zoomOutBtn');
 
 const imageUrlInput = document.getElementById('imageUrlInput');
 const addImageBtn = document.getElementById('addImageBtn');
+const imageFileInput = document.getElementById('imageFileInput');
 const deleteImageBtn = document.getElementById('deleteImageBtn');
 const noImagesMessage = document.getElementById('noImagesMessage');
 const sliderContainer = document.querySelector('.slider-container');
@@ -21,7 +22,7 @@ function getSlides() {
 function showSlide(index) {
     const slides = getSlides();
 
-    // If there are no slides, show empty state message and hide the slider
+    // Show empty state if there are no images
     if (slides.length === 0) {
         noImagesMessage.style.display = 'block';
         sliderContainer.style.display = 'none';
@@ -31,11 +32,11 @@ function showSlide(index) {
         sliderContainer.style.display = 'block';
     }
 
-    // Keep the index bounds clean
+    // Keep indices within range
     if (index >= slides.length) currentIndex = 0;
     if (index < 0) currentIndex = slides.length - 1;
 
-    // Reset zoom scale back to normal on transition
+    // Reset zoom when switching images
     currentScale = 1;
     slides.forEach((slide) => {
         slide.classList.remove('active');
@@ -51,7 +52,7 @@ function applyZoom() {
     }
 }
 
-// Navigation Triggers
+// Navigation Events
 prevBtn.addEventListener('click', () => {
     currentIndex--;
     showSlide(currentIndex);
@@ -62,7 +63,7 @@ nextBtn.addEventListener('click', () => {
     showSlide(currentIndex);
 });
 
-// Zoom Triggers
+// Zoom Events
 zoomInBtn.addEventListener('click', () => {
     if (currentScale < 3) {
         currentScale += 0.2;
@@ -77,48 +78,66 @@ zoomOutBtn.addEventListener('click', () => {
     }
 });
 
-// Add Image Trigger
+// Helper function to insert a new slide
+function insertSlide(source, altText) {
+    const newImg = document.createElement('img');
+    newImg.src = source;
+    newImg.alt = altText;
+    newImg.classList.add('slide');
+
+    slidesContainer.appendChild(newImg);
+
+    const slides = getSlides();
+    if (slides.length === 1) {
+        currentIndex = 0;
+        showSlide(currentIndex);
+    } else {
+        alert("Image added to the end of your slider!");
+    }
+}
+
+// Add via Web URL
 addImageBtn.addEventListener('click', () => {
     const url = imageUrlInput.value.trim();
     if (!url) {
         alert("Please enter a valid image URL first.");
         return;
     }
-
-    // Create new image element
-    const newImg = document.createElement('img');
-    newImg.src = url;
-    newImg.alt = "User added slide";
-    newImg.classList.add('slide');
-
-    // Append to the list
-    slidesContainer.appendChild(newImg);
+    insertSlide(url, "Web added slide");
     imageUrlInput.value = ''; // clear input
+});
 
-    const slides = getSlides();
-    if (slides.length === 1) {
-        // If the slider was empty, show this new slide immediately
-        currentIndex = 0;
-        showSlide(currentIndex);
-    } else {
-        alert("Image added to the end of your slider!");
+// Add via Local File Input
+imageFileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        // Create a temporary local URL for the selected system file
+        const objectURL = URL.createObjectURL(file);
+        insertSlide(objectURL, file.name);
+        
+        // Reset file input value so you can choose the same file again if desired
+        imageFileInput.value = ''; 
     }
 });
 
-// Delete Image Trigger
+// Delete Current Image
 deleteImageBtn.addEventListener('click', () => {
     const slides = getSlides();
     if (slides.length === 0) return;
 
-    // Remove the current active slide element from DOM
     const activeSlide = slides[currentIndex];
+    
+    // If the image was uploaded locally, release the allocated memory URL
+    if (activeSlide.src.startsWith('blob:')) {
+        URL.revokeObjectURL(activeSlide.src);
+    }
+
     activeSlide.remove();
 
     const remainingSlides = getSlides();
     if (remainingSlides.length === 0) {
-        showSlide(0); // Triggers empty state setup
+        showSlide(0);
     } else {
-        // Adjust index if we deleted the very last slide
         if (currentIndex >= remainingSlides.length) {
             currentIndex = remainingSlides.length - 1;
         }
