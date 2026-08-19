@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Image Slider</title>
+    <title>Dynamic Image Slider with Local Upload</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,10 +34,19 @@
 
         <!-- Image Management Panel -->
         <div class="manage-controls">
+            <!-- Add via Web URL -->
             <div class="add-group">
-                <input type="text" id="imageUrlInput" placeholder="Paste image URL here (e.g., https://picsum.photos/800/400)">
-                <button id="addImageBtn" class="btn-manage btn-add">Add Image</button>
+                <input type="text" id="imageUrlInput" placeholder="Paste image URL here...">
+                <button id="addImageBtn" class="btn-manage btn-add">Add URL</button>
             </div>
+
+            <!-- Add from local files -->
+            <div class="file-group">
+                <label for="imageFileInput" class="btn-manage btn-file">Choose Local Image</label>
+                <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+            </div>
+
+            <!-- Delete slide -->
             <button id="deleteImageBtn" class="btn-manage btn-delete">Delete Current Slide</button>
         </div>
     </div>
