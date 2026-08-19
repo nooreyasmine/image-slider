@@ -8,6 +8,8 @@ const imageUrlInput = document.getElementById('imageUrlInput');
 const addImageBtn = document.getElementById('addImageBtn');
 const imageFileInput = document.getElementById('imageFileInput');
 const deleteImageBtn = document.getElementById('deleteImageBtn');
+const moveLeftBtn = document.getElementById('moveLeftBtn');
+const moveRightBtn = document.getElementById('moveRightBtn');
 const noImagesMessage = document.getElementById('noImagesMessage');
 const sliderContainer = document.querySelector('.slider-container');
 
@@ -22,7 +24,6 @@ function getSlides() {
 function showSlide(index) {
     const slides = getSlides();
 
-    // Show empty state if there are no images
     if (slides.length === 0) {
         noImagesMessage.style.display = 'block';
         sliderContainer.style.display = 'none';
@@ -32,11 +33,9 @@ function showSlide(index) {
         sliderContainer.style.display = 'block';
     }
 
-    // Keep indices within range
     if (index >= slides.length) currentIndex = 0;
     if (index < 0) currentIndex = slides.length - 1;
 
-    // Reset zoom when switching images
     currentScale = 1;
     slides.forEach((slide) => {
         slide.classList.remove('active');
@@ -104,19 +103,52 @@ addImageBtn.addEventListener('click', () => {
         return;
     }
     insertSlide(url, "Web added slide");
-    imageUrlInput.value = ''; // clear input
+    imageUrlInput.value = '';
 });
 
 // Add via Local File Input
 imageFileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
-        // Create a temporary local URL for the selected system file
         const objectURL = URL.createObjectURL(file);
         insertSlide(objectURL, file.name);
-        
-        // Reset file input value so you can choose the same file again if desired
         imageFileInput.value = ''; 
+    }
+});
+
+// Move Slide Left (Decrease sequence position)
+moveLeftBtn.addEventListener('click', () => {
+    const slides = getSlides();
+    if (slides.length <= 1) return;
+
+    const activeSlide = slides[currentIndex];
+    const prevSlide = activeSlide.previousElementSibling;
+
+    if (prevSlide) {
+        // Swaps the active slide with the one before it
+        slidesContainer.insertBefore(activeSlide, prevSlide);
+        currentIndex--;
+        showSlide(currentIndex);
+    } else {
+        alert("This slide is already in the first position.");
+    }
+});
+
+// Move Slide Right (Increase sequence position)
+moveRightBtn.addEventListener('click', () => {
+    const slides = getSlides();
+    if (slides.length <= 1) return;
+
+    const activeSlide = slides[currentIndex];
+    const nextSlide = activeSlide.nextElementSibling;
+
+    if (nextSlide) {
+        // Swaps the active slide with the one after it
+        slidesContainer.insertBefore(activeSlide, nextSlide.nextElementSibling);
+        currentIndex++;
+        showSlide(currentIndex);
+    } else {
+        alert("This slide is already in the last position.");
     }
 });
 
@@ -127,7 +159,6 @@ deleteImageBtn.addEventListener('click', () => {
 
     const activeSlide = slides[currentIndex];
     
-    // If the image was uploaded locally, release the allocated memory URL
     if (activeSlide.src.startsWith('blob:')) {
         URL.revokeObjectURL(activeSlide.src);
     }
