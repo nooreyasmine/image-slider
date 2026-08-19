@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Image Slider with Zoom</title>
+    <title>Dynamic Image Slider</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Main Container wrapping both slider and controls -->
     <div class="wrapper">
+        <!-- Message displayed when there are no images left -->
+        <div id="noImagesMessage" class="empty-state" style="display:none;">
+            <p>No images in the slider. Add one below!</p>
+        </div>
+
         <div class="slider-container">
             <div class="slides">
                 <img src="https://picsum.photos/id/1018/800/400" alt="Slide 1" class="slide active">
@@ -26,6 +30,15 @@
         <div class="zoom-controls">
             <button id="zoomInBtn" class="btn-zoom">Zoom In (+)</button>
             <button id="zoomOutBtn" class="btn-zoom">Zoom Out (-)</button>
+        </div>
+
+        <!-- Image Management Panel -->
+        <div class="manage-controls">
+            <div class="add-group">
+                <input type="text" id="imageUrlInput" placeholder="Paste image URL here (e.g., https://picsum.photos/800/400)">
+                <button id="addImageBtn" class="btn-manage btn-add">Add Image</button>
+            </div>
+            <button id="deleteImageBtn" class="btn-manage btn-delete">Delete Current Slide</button>
         </div>
     </div>
 
